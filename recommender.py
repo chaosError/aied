@@ -5,11 +5,6 @@ import os
 import matplotlib.pyplot as plt 
 import altair as alt
 
-from rake_nltk import Rake
-from nltk.corpus import stopwords
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.feature_extraction.text import CountVectorizer
-
 FILTERED_COURSES = None
 SELECTED_COURSE = None
 
@@ -65,6 +60,12 @@ def prepare_data(df):
 	df['skills'] = df['skills'].apply(split_it)
 
 	return df
+
+
+from rake_nltk import Rake
+from nltk.corpus import stopwords
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
 
 @st.cache(allow_output_mutation=True)
 def load_data():
