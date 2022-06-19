@@ -8,12 +8,27 @@ import altair as alt
 FILTERED_COURSES = None
 SELECTED_COURSE = None
 
+@st.cache(allow_output_mutation=True)
+def load_data():
+	source_path1 = os.path.join("data/coursera-courses-overview.csv")
+	source_path2 = os.path.join("data/coursera-individual-courses.csv")
+	source_path3 = os.path.join("data/coursera-courses.csv")
+	df_overview = pd.read_csv(source_path1)
+	df_individual = pd.read_csv(source_path2)
+	df_style = pd.read_csv(source_path3)
+	df = pd.concat([df_overview, df_individual], axis=1)
+	df["learn_style"] = df_style["learn_style"]
+	df = prepare_data(df)
+	return df
+
 @st.cache(persist=True)
-def clean_col_names(df, columns):
-	new = []
-	for c in columns:
-		new.append(c.lower().replace(' ','_'))
-	return new
+def filter(dataframe, chosen_options, feature, id):
+	selected_records = []
+	for i in range(1000):
+		for op in chosen_options:
+			if op in dataframe[feature][i]:
+				selected_records.append(dataframe[id][i])
+	return selected_records
 
 @st.cache(persist=True)
 def prepare_data(df):
@@ -61,33 +76,17 @@ def prepare_data(df):
 
 	return df
 
+@st.cache(persist=True)
+def clean_col_names(df, columns):
+	new = []
+	for c in columns:
+		new.append(c.lower().replace(' ','_'))
+	return new
 
 from rake_nltk import Rake
 from nltk.corpus import stopwords
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
-
-@st.cache(allow_output_mutation=True)
-def load_data():
-	source_path1 = os.path.join("data/coursera-courses-overview.csv")
-	source_path2 = os.path.join("data/coursera-individual-courses.csv")
-	source_path3 = os.path.join("data/coursera-courses.csv")
-	df_overview = pd.read_csv(source_path1)
-	df_individual = pd.read_csv(source_path2)
-	df_style = pd.read_csv(source_path3)
-	df = pd.concat([df_overview, df_individual], axis=1)
-	df["learn_style"] = df_style["learn_style"]
-	df = prepare_data(df)
-	return df
-
-@st.cache(persist=True)
-def filter(dataframe, chosen_options, feature, id):
-	selected_records = []
-	for i in range(1000):
-		for op in chosen_options:
-			if op in dataframe[feature][i]:
-				selected_records.append(dataframe[id][i])
-	return selected_records
 
 def extract_keywords(df, feature):
     r = Rake()
