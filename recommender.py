@@ -251,3 +251,8 @@ def main():
 	
 if __name__=="__main__":
 	main()
+
+# Transform following csv scheme
+#   `course_url,course_name,user,recommend1,recommend2,recommend3,recommend4,recommend5,recommend-1,recommend-2,recommend-3,recommend-4,recommend-5`
+# into
+#   `course_url,course_name,similiar_redirect_time,dissimilar_redirect_time`
