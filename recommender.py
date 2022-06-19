@@ -5,9 +5,6 @@ import os
 import matplotlib.pyplot as plt 
 import altair as alt
 
-FILTERED_COURSES = None
-SELECTED_COURSE = None
-
 @st.cache(allow_output_mutation=True)
 def load_data():
 	source_path1 = os.path.join("data/coursera-courses-overview.csv")
